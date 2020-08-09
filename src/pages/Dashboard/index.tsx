@@ -65,21 +65,26 @@ const Dashboard: React.FC = () => {
       Object.assign(
         params,
         searchValue && {
-          q: searchValue,
+          name_like: searchValue,
         },
       );
 
       Object.assign(
         params,
         selectedCategory && {
-          category: selectedCategory,
+          category_like: selectedCategory,
         },
       );
 
       const { data } = await api.get<Food[]>('foods', {
         params,
       });
-      setFoods(data);
+      setFoods(
+        data.map(food => ({
+          ...food,
+          formattedPrice: formatValue(food.price),
+        })),
+      );
     }
 
     loadFoods();
